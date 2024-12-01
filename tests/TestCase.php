@@ -2,9 +2,9 @@
 
 namespace Guava\FilamentIconSelectColumn\Tests;
 
+use Guava\FilamentIconSelectColumn\FilamentIconSelectColumnServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Guava\FilamentIconSelectColumn\FilamentIconSelectColumnServiceProvider;
 
 class TestCase extends Orchestra
 {
