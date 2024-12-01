@@ -16,6 +16,12 @@ This plugin adds an Icon Select Column to your filament tables.
   <source src="https://github.com/GuavaCZ/filament-icon-select-column/raw/main/docs/images/demo_preview.mp4" type="video/mp4">
 </video>
 
+
+
+https://github.com/user-attachments/assets/72cb40cf-27cb-4f6b-b204-178c1f3dd0a9
+
+
+
 ![Screenshot 1](https://github.com/GuavaCZ/filament-icon-select-column/raw/main/docs/images/screenshot_01.png)
 
 ## Support us
