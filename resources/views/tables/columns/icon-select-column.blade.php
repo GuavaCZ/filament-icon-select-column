@@ -57,6 +57,7 @@
                 'flex-col' => $isListWithLineBreaks(),
             ])
     }}
+    x-on:click.stop
 >
     <input
         type="hidden"
