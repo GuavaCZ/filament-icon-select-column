@@ -3,9 +3,11 @@
 namespace Guava\FilamentIconSelectColumn\Tables\Columns;
 
 use BackedEnum;
+use Closure;
 use Filament\Forms\Components\Concerns\HasColors;
 use Filament\Forms\Components\Concerns\HasIcons;
 use Filament\Forms\Components\Concerns\HasOptions;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\Concerns\CanBeValidated;
 use Filament\Tables\Columns\Concerns\CanUpdateState;
 use Filament\Tables\Columns\Contracts\Editable;
@@ -27,6 +29,20 @@ class IconSelectColumn extends IconColumn implements Editable
     use HasOptions;
 
     protected string $view = 'guava-icon-select-column::tables.columns.icon-select-column';
+
+    protected bool | Closure $shouldCloseOnSelection = false;
+
+    public function closeOnSelection(bool | Closure $condition = true): static
+    {
+        $this->shouldCloseOnSelection = $condition;
+
+        return $this;
+    }
+
+    public function shouldCloseOnSelection(): bool
+    {
+        return (bool) $this->evaluate($this->shouldCloseOnSelection);
+    }
 
     public function getIcon(mixed $value): ?string
     {

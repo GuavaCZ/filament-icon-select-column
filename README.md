@@ -69,7 +69,17 @@ $table->columns([
             'opt2' => 'heroicon-o-x-mark',
         ])
 ]);
-````
+```
+
+### Close on selection
+If you want the dropdown to automatically close after you select an option, you can use the `closeOnSelection` method:
+```php
+use Guava\FilamentIconSelectColumn\Tables\Columns\IconSelectColumn;
+
+IconSelectColumn::make('state')
+    ->closeOnSelection()
+    // ...
+```
 
 ## Testing
 

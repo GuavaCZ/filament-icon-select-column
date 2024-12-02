@@ -146,19 +146,23 @@
                         x-on:change="
                             isLoading = true
 
+                            if (@js($shouldCloseOnSelection())) {
+                                close()
+                            }
+
                             const response = await $wire.updateTableColumnState(
                                 name,
                                 recordKey,
                                 $event.target.value,
                             )
 
+                            isLoading = false
+
                             error = response?.error ?? undefined
 
                             if (! error) {
                                 state = response
-                            }
-
-                            isLoading = false"
+                            }"
                         class="peer pointer-events-none absolute opacity-0"
                     />
 
