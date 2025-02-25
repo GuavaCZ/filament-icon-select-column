@@ -7,7 +7,6 @@ use Closure;
 use Filament\Forms\Components\Concerns\HasColors;
 use Filament\Forms\Components\Concerns\HasIcons;
 use Filament\Forms\Components\Concerns\HasOptions;
-use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\Concerns\CanBeValidated;
 use Filament\Tables\Columns\Concerns\CanUpdateState;
 use Filament\Tables\Columns\Contracts\Editable;
