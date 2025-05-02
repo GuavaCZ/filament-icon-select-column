@@ -130,56 +130,58 @@
                 />
             </x-slot>
 
-            <x-filament::dropdown.list>
-                @foreach ($getOptions() as $value => $label)
-                    @php
-                        $inputId = "{$id}-{$value}";
-                        $shouldOptionBeDisabled = $isDisabled || $isOptionDisabled($value, $label);
-                    @endphp
-                    <input
-                        id="{{ $inputId }}"
-                        name="{{ $id }}"
-                        type="radio"
-                        value="{{ $value }}"
-                        wire:loading.attr="disabled"
-                        x-model="state"
-                        x-on:change="
-                            isLoading = true
+            @if(! $isDisabled())
+                <x-filament::dropdown.list>
+                    @foreach ($getOptions() as $value => $label)
+                        @php
+                            $inputId = "{$id}-{$value}";
+                            $shouldOptionBeDisabled = $isDisabled || $isOptionDisabled($value, $label);
+                        @endphp
+                        <input
+                            id="{{ $inputId }}"
+                            name="{{ $id }}"
+                            type="radio"
+                            value="{{ $value }}"
+                            wire:loading.attr="disabled"
+                            x-model="state"
+                            x-on:change="
+                                isLoading = true
 
-                            if (@js($shouldCloseOnSelection())) {
-                                close()
-                            }
+                                if (@js($shouldCloseOnSelection())) {
+                                    close()
+                                }
 
-                            const response = await $wire.updateTableColumnState(
-                                name,
-                                recordKey,
-                                $event.target.value,
-                            )
+                                const response = await $wire.updateTableColumnState(
+                                    name,
+                                    recordKey,
+                                    $event.target.value,
+                                )
 
-                            isLoading = false
+                                isLoading = false
 
-                            error = response?.error ?? undefined
+                                error = response?.error ?? undefined
 
-                            if (! error) {
-                                state = response
-                            }"
-                        class="peer pointer-events-none absolute opacity-0"
-                    />
+                                if (! error) {
+                                    state = response
+                                }"
+                            class="peer pointer-events-none absolute opacity-0"
+                        />
 
-                    <label for="{{$inputId}}" class="hover:cursor-pointer">
-                        <x-filament::dropdown.list.item
-                            @class([
-                                'bg-gray-50 dark:bg-gray-800' => $value === $state,
-                            ])
-                            :icon="$getIcon($value)"
-                            :icon-color="$getColor($value)"
-                            tag="a"
-                        >
-                            {{ $label }}
-                        </x-filament::dropdown.list.item>
-                    </label>
-                @endforeach
-            </x-filament::dropdown.list>
+                        <label for="{{$inputId}}" class="hover:cursor-pointer">
+                            <x-filament::dropdown.list.item
+                                @class([
+                                    'bg-gray-50 dark:bg-gray-800' => $value === $state,
+                                ])
+                                :icon="$getIcon($value)"
+                                :icon-color="$getColor($value)"
+                                tag="a"
+                            >
+                                {{ $label }}
+                            </x-filament::dropdown.list.item>
+                        </label>
+                    @endforeach
+                </x-filament::dropdown.list>
+            @endif
         </x-filament::dropdown>
     @elseif (($placeholder = $getPlaceholder()) !== null)
         <x-filament-tables::columns.placeholder>
