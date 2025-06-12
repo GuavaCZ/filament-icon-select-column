@@ -1,5 +1,13 @@
 @php
-    use Filament\Tables\Columns\IconColumn\IconColumnSize;
+    use Filament\Support\Enums\Alignment;
+    use Filament\Support\Facades\FilamentAsset;
+    use Filament\Support\Facades\FilamentView;
+    use Illuminate\Support\Js;
+    use Illuminate\View\ComponentAttributeBag;
+    use Filament\Schemas\View\Components\IconComponent;
+
+    use function Filament\Support\generate_icon_html;
+    use function Filament\Support\generate_loading_indicator_html;
 
     $state = $getState();
     if ($state instanceof BackedEnum) {
@@ -7,185 +15,87 @@
     }
     $state = strval($state);
 
-    $id = "{$this->getId()}.table.record.$recordKey.column.{$getName()}.icon-select-column";
+    $icon = $getIcon($state);
+    $color = $getColor($state);
+    $size = $getSize($state);
+
+    $alignment = $getAlignment();
 @endphp
 
 <div
-    x-data="{
-        error: undefined,
+    {{ $getExtraAttributeBag()
+        ->merge([
+            'x-load' => FilamentView::hasSpaMode()
+                ? 'visible || event (x-modal-opened)'
+                : true,
+            'x-load-src' => FilamentAsset::getAlpineComponentSrc('columns/icon-select', 'guava/icon-select-column'),
+            'x-data' => 'iconSelectTableColumn({
+                name: ' . Js::from($column->getName()) . ',
+                recordKey: ' . Js::from($column->getRecordKey()) . ',
+                state: ' . Js::from($state) . ',
+            })',
+        ], escape: false)
+        ->class([
+            'w-full flex',
+            match ($alignment) {
+                Alignment::Start, Alignment::Left => 'justify-start',
+                Alignment::End, Alignment::Right => 'justify-end',
+                Alignment::Center => 'justify-center',
+                default => 'justify-center',
+            }
+        ])
+}}>
 
-        isLoading: false,
+    <input type="hidden" value="<?= $state ?>" x-ref="serverState"/>
 
-        name: @js($getName()),
-
-        recordKey: @js($recordKey),
-
-        state: @js($state),
-    }"
-    x-init="
-        () => {
-            Livewire.hook('commit', ({ component, commit, succeed, fail, respond }) => {
-                succeed(({ snapshot, effect }) => {
-                    $nextTick(() => {
-                        if (component.id !== @js($this->getId())) {
-                            return
-                        }
-
-                        if (! $refs.newState) {
-                            return
-                        }
-
-                        let newState = $refs.newState.value
-
-                        if (state === newState) {
-                            return
-                        }
-
-                        state = newState
-                    })
-                })
-            })
-        }
-    "
-    {{
-        $attributes
-            ->merge($getExtraAttributes(), escape: false)
-            ->class([
-                'fi-ta-icon flex gap-1.5',
-                'flex-wrap' => $canWrap(),
-                'px-3 py-4' => ! $isInline(),
-                'flex-col' => $isListWithLineBreaks(),
-            ])
-    }}
-    x-on:click.stop
->
-    <input
-        type="hidden"
-        value="{{ str($state)->replace('"', '\\"') }}"
-        x-ref="newState"
-    />
-
-    @if ($icon = $getIcon($state))
-        @php
-            $color = $getColor($state) ?? 'gray';
-            $size = $getSize($state) ?? IconColumnSize::Large;
-        @endphp
-        <x-filament::dropdown placement="bottom-start"
-                              teleport="body"
+    <x-filament::dropdown
+        x-bind:style="`--gu-isc-offset: ${offset}px`"
+        class="[&_.fi-dropdown-panel]:translate-x-[var(--gu-isc-offset)]"
+        teleport="body"
+        placement="bottom-start">
+        <x-slot name="trigger"
+                x-on:mouseover="if (modal != null) { offset = modal.getBoundingClientRect().left }"
         >
-            <x-slot name="trigger">
-                <x-filament::loading-indicator
-                    @class([
-                        match ($size) {
-                            IconColumnSize::ExtraSmall, 'xs' => 'fi-ta-icon-item-size-xs h-3 w-3',
-                            IconColumnSize::Small, 'sm' => 'fi-ta-icon-item-size-sm h-4 w-4',
-                            IconColumnSize::Medium, 'md' => 'fi-ta-icon-item-size-md h-5 w-5',
-                            IconColumnSize::Large, 'lg' => 'fi-ta-icon-item-size-lg h-6 w-6',
-                            IconColumnSize::ExtraLarge, 'xl' => 'fi-ta-icon-item-size-xl h-7 w-7',
-                            IconColumnSize::TwoExtraLarge, IconColumnSize::ExtraExtraLarge, '2xl' => 'fi-ta-icon-item-size-2xl h-8 w-8',
-                            default => $size,
-                        },
-                        match ($color) {
-                            'gray' => 'text-gray-400 dark:text-gray-500',
-                            default => 'fi-color-custom text-custom-500 dark:text-custom-400',
-                        },
-                        is_string($color) ? 'fi-color-' . $color : null,
-                    ])
-                    @style([
-                        \Filament\Support\get_color_css_variables(
-                            $color,
-                            shades: [400, 500],
-                            alias: 'tables::columns.icon-select-column.item',
-                        ) => $color !== 'gray',
-                    ])
-                    x-show="isLoading"
-                />
-                <x-filament::icon
-                    x-show="! isLoading"
-                    :icon="$icon"
-                    @class([
-                        'fi-ta-icon-item',
-                        match ($size) {
-                            IconColumnSize::ExtraSmall, 'xs' => 'fi-ta-icon-item-size-xs h-3 w-3',
-                            IconColumnSize::Small, 'sm' => 'fi-ta-icon-item-size-sm h-4 w-4',
-                            IconColumnSize::Medium, 'md' => 'fi-ta-icon-item-size-md h-5 w-5',
-                            IconColumnSize::Large, 'lg' => 'fi-ta-icon-item-size-lg h-6 w-6',
-                            IconColumnSize::ExtraLarge, 'xl' => 'fi-ta-icon-item-size-xl h-7 w-7',
-                            IconColumnSize::TwoExtraLarge, IconColumnSize::ExtraExtraLarge, '2xl' => 'fi-ta-icon-item-size-2xl h-8 w-8',
-                            default => $size,
-                        },
-                        match ($color) {
-                            'gray' => 'text-gray-400 dark:text-gray-500',
-                            default => 'fi-color-custom text-custom-500 dark:text-custom-400',
-                        },
-                        is_string($color) ? 'fi-color-' . $color : null,
-                    ])
-                    @style([
-                        \Filament\Support\get_color_css_variables(
-                            $color,
-                            shades: [400, 500],
-                            alias: 'tables::columns.icon-select-column.item',
-                        ) => $color !== 'gray',
-                    ])
-                />
-            </x-slot>
+            <span x-show="isLoading" x-cloak>
+                {{ generate_loading_indicator_html(
+                    attributes: (new ComponentAttributeBag)
+                        ->merge([
+                            'class' => 'text-gray-500',
+                        ]),
+                    size: $size
+                ) }}
+            </span>
+            <span x-show="!isLoading">
+                {{
+                    generate_icon_html(
+                        $icon,
+                        attributes: (new ComponentAttributeBag)
+                            ->color(IconComponent::class, $color)
+                            ->merge([
+                                'class' => 'text-color-500',
+                            ]),
+                        size: $size,
+                    )
+                }}
+            </span>
+        </x-slot>
 
-            @if(! $isDisabled())
-                <x-filament::dropdown.list>
-                    @foreach ($getOptions() as $value => $label)
-                        @php
-                            $inputId = "{$id}-{$value}";
-                            $shouldOptionBeDisabled = $isDisabled || $isOptionDisabled($value, $label);
-                        @endphp
-                        <input
-                            id="{{ $inputId }}"
-                            name="{{ $id }}"
-                            type="radio"
-                            value="{{ $value }}"
-                            wire:loading.attr="disabled"
-                            x-model="state"
-                            x-on:change="
-                                isLoading = true
+        <x-filament::dropdown.list>
+            @foreach($getOptions() as $key => $label)
+                @php
+                    $icon = $getIcon($key);
+                    $color = $getColor($key);
+                    $size = $getSize($key);
+                @endphp
 
-                                if (@js($shouldCloseOnSelection())) {
-                                    close()
-                                }
-
-                                const response = await $wire.updateTableColumnState(
-                                    name,
-                                    recordKey,
-                                    $event.target.value,
-                                )
-
-                                isLoading = false
-
-                                error = response?.error ?? undefined
-
-                                if (! error) {
-                                    state = response
-                                }"
-                            class="peer pointer-events-none absolute opacity-0"
-                        />
-
-                        <label for="{{$inputId}}" class="hover:cursor-pointer">
-                            <x-filament::dropdown.list.item
-                                @class([
-                                    'bg-gray-50 dark:bg-gray-800' => $value === $state,
-                                ])
-                                :icon="$getIcon($value)"
-                                :icon-color="$getColor($value)"
-                                tag="a"
-                            >
-                                {{ $label }}
-                            </x-filament::dropdown.list.item>
-                        </label>
-                    @endforeach
-                </x-filament::dropdown.list>
-            @endif
-        </x-filament::dropdown>
-    @elseif (($placeholder = $getPlaceholder()) !== null)
-        <x-filament-tables::columns.placeholder>
-            {{ $placeholder }}
-        </x-filament-tables::columns.placeholder>
-    @endif
+                <x-filament::dropdown.list.item :icon="$icon"
+                                                :icon-color="$color"
+                                                :icon-size="$size"
+                                                x-on:click.prevent="state = '{{$key}}'"
+                >
+                    {{$label}}
+                </x-filament::dropdown.list.item>
+            @endforeach
+        </x-filament::dropdown.list>
+    </x-filament::dropdown>
 </div>

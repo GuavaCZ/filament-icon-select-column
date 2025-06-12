@@ -2,63 +2,67 @@
 
 namespace Guava\FilamentIconSelectColumn\Tables\Columns;
 
-use BackedEnum;
 use Closure;
 use Filament\Forms\Components\Concerns\HasColors;
+use Filament\Forms\Components\Concerns\HasEnum;
 use Filament\Forms\Components\Concerns\HasIcons;
 use Filament\Forms\Components\Concerns\HasOptions;
+use Filament\Support\Enums\IconSize;
+use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\Concerns\CanBeValidated;
 use Filament\Tables\Columns\Concerns\CanUpdateState;
 use Filament\Tables\Columns\Contracts\Editable;
-use Filament\Tables\Columns\IconColumn;
 use Illuminate\Validation\Rule;
 
-class IconSelectColumn extends IconColumn implements Editable
+class IconSelectColumn extends Column implements Editable
 {
     use CanBeValidated {
         CanBeValidated::getRules as baseGetRules;
     }
     use CanUpdateState;
-    use HasColors {
-        HasColors::getColor as baseGetColor;
-    }
-    use HasIcons {
-        HasIcons::getIcon as baseGetIcon;
-    }
+    use HasColors;
+    use HasEnum;
+    use HasIcons;
     use HasOptions;
 
     protected string $view = 'guava-icon-select-column::tables.columns.icon-select-column';
 
-    protected bool | Closure $shouldCloseOnSelection = false;
+    protected IconSize | string | Closure | null $size = null;
 
-    public function closeOnSelection(bool | Closure $condition = true): static
+    public function configure(): static
     {
-        $this->shouldCloseOnSelection = $condition;
+        return $this
+            ->disabledClick()
+            ->alignCenter()
+        ;
+    }
+
+    public function size(IconSize | string | Closure | null $size): static
+    {
+        $this->size = $size;
 
         return $this;
     }
 
-    public function shouldCloseOnSelection(): bool
+    public function getSize(mixed $state): IconSize | string | null
     {
-        return (bool) $this->evaluate($this->shouldCloseOnSelection);
-    }
+        $size = $this->evaluate($this->size, [
+            'state' => $state,
+        ]);
 
-    public function getIcon(mixed $value): ?string
-    {
-        if ($value instanceof BackedEnum) {
-            $value = $value?->value ?? $value->name;
+        if (blank($size)) {
+            return null;
         }
 
-        return $this->baseGetIcon($value);
-    }
-
-    public function getColor(mixed $value): string | array | null
-    {
-        if ($value instanceof BackedEnum) {
-            $value = $value?->value ?? $value->name;
+        if ($size === 'base') {
+            return null;
         }
 
-        return $this->baseGetColor($value);
+        if (is_string($size)) {
+            $size = IconSize::tryFrom($size) ?? $size;
+        }
+
+        return $size;
     }
 
     public function getRules(): array

@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "filament/filament": "^3.2",
+        "filament/filament": "^3.2|^4.0",
         "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
@@ -44,12 +44,9 @@
         }
     },
     "scripts": {
-        "post-autoload-dump": "@composer run prepare",
         "clear": "@php vendor/bin/testbench package:purge-filament-icon-select-column --ansi",
-        "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
-            "@composer run prepare",
-            "@php vendor/bin/testbench workbench:build --ansi"
+            "@composer run prepare"
         ],
         "start": [
             "Composer\\Config::disableProcessTimeout",
@@ -78,6 +75,6 @@
             }
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "minimum-stability": "beta",
+    "prefer-stable": false
 }

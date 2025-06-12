@@ -1,6 +1,8 @@
 {
   "devDependencies": {
     "conventional-changelog-conventionalcommits": "^7.0.2",
+    "esbuild": "^0.25.5",
     "semantic-release": "^22.0.5"
-  }
+  },
+    "type": "module"
 }
