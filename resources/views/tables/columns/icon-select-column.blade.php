@@ -1,13 +1,5 @@
 @php
-    use Filament\Support\Enums\Alignment;
-    use Filament\Support\Facades\FilamentAsset;
-    use Filament\Support\Facades\FilamentView;
-    use Illuminate\Support\Js;
-    use Illuminate\View\ComponentAttributeBag;
-    use Filament\Schemas\View\Components\IconComponent;
-
-    use function Filament\Support\generate_icon_html;
-    use function Filament\Support\generate_loading_indicator_html;
+    use Filament\Schemas\View\Components\IconComponent;use Filament\Support\Enums\Alignment;use Filament\Support\Facades\FilamentAsset;use Filament\Support\Facades\FilamentView;use Illuminate\Support\Js;use Illuminate\View\ComponentAttributeBag;use function Filament\Support\generate_icon_html;use function Filament\Support\generate_loading_indicator_html;
 
     $state = $getState();
     if ($state instanceof BackedEnum) {
@@ -71,9 +63,13 @@
                         $icon,
                         attributes: (new ComponentAttributeBag)
                             ->color(IconComponent::class, $color)
+                            ->class([
+                                'fi-text-color-500',
+                            ])
                             ->merge([
-                                'class' => 'text-color-500',
-                            ]),
+                                'style' => 'color: var(--text)'
+                            ])
+                            ->color(IconComponent::class, $color),
                         size: $size,
                     )
                 }}

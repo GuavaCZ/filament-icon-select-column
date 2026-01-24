@@ -10,6 +10,13 @@
 
 This plugin adds an Icon Select Column to your filament tables.
 
+## Version compatibility
+| Filament version | Plugin version |
+| ---------------- |:--------------:| 
+| 3.x              | 1.x            |
+| 4.x              | 2.x            |
+| 5.x              | 3.x            |
+
 ## Showcase
 
 <video width="320" height="240" controls>
@@ -36,6 +43,15 @@ You can install the package via composer:
 
 ```bash
 composer require guava/filament-icon-select-column
+```
+
+Additionally, you **need** to have a custom filamen theme installed, otherwise you might encounter some styling issues.
+
+Check the official filament documentation here to learn how to do that.
+
+Then in your custom filament theme `theme.css` file, add the following line to build the CSS correctly:
+```css
+@source '../../../../vendor/guava/filament-icon-select-column/resources/**/*';
 ```
 
 ## Usage
