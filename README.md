@@ -47,7 +47,7 @@ composer require guava/filament-icon-select-column
 
 Additionally, you **need** to have a custom filamen theme installed, otherwise you might encounter some styling issues.
 
-Check the official filament documentation here to learn how to do that.
+Check the official [filament documentation here](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme) to learn how to do that.
 
 Then in your custom filament theme `theme.css` file, add the following line to build the CSS correctly:
 ```css
