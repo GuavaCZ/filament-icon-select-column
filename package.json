@@ -1,8 +1,10 @@
 {
-  "devDependencies": {
-    "conventional-changelog-conventionalcommits": "^7.0.2",
-    "esbuild": "^0.25.5",
-    "semantic-release": "^22.0.5"
-  },
-    "type": "module"
+    "type": "module",
+    "scripts": {
+        "build": "node bin/build.js",
+        "dev": "node bin/build.js --dev"
+    },
+    "devDependencies": {
+        "esbuild": "^0.25.5"
+    }
 }
