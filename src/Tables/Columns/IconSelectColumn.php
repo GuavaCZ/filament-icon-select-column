@@ -29,6 +29,20 @@ class IconSelectColumn extends Column implements Editable
 
     protected IconSize | string | Closure | null $size = null;
 
+    protected bool | Closure $shouldCloseOnSelection = false;
+
+    public function closeOnSelection(bool | Closure $condition = true): static
+    {
+        $this->shouldCloseOnSelection = $condition;
+
+        return $this;
+    }
+
+    public function shouldCloseOnSelection(): bool
+    {
+        return (bool) $this->evaluate($this->shouldCloseOnSelection);
+    }
+
     public function configure(): static
     {
         return $this

@@ -87,7 +87,7 @@
                 <x-filament::dropdown.list.item :icon="$icon"
                                                 :icon-color="$color"
                                                 :icon-size="$size"
-                                                x-on:click.prevent="state = '{{$key}}'"
+                                                x-on:click.prevent="state = '{{$key}}'{{ $shouldCloseOnSelection() ? '; close()' : '' }}"
                 >
                     {{$label}}
                 </x-filament::dropdown.list.item>
