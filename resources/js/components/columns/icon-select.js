@@ -11,7 +11,6 @@ export default function iconSelectTableColumn({ name, recordKey, state }) {
         offset: 0,
 
         init() {
-            console.log('initialized');
             Livewire.hook(
                 'commit',
                 ({ component, commit, succeed, fail, respond }) => {
@@ -47,16 +46,13 @@ export default function iconSelectTableColumn({ name, recordKey, state }) {
 
             this.$watch('state', async () => {
                 const serverState = this.getServerState()
-                console.log('server state', serverState);
 
                 if (
                     serverState === undefined ||
                     this.getNormalizedState() === serverState
                 ) {
-                    console.log('Do nothing');
                     return
                 }
-                console.log('update table column state');
 
                 this.isLoading = true
 
@@ -65,7 +61,6 @@ export default function iconSelectTableColumn({ name, recordKey, state }) {
                     recordKey,
                     this.state,
                 )
-                console.log('RESPONSE', response)
 
                 this.error = response?.error ?? undefined
 

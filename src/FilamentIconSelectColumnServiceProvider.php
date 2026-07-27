@@ -9,16 +9,15 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class FilamentIconSelectColumnServiceProvider extends PackageServiceProvider
 {
+    public static string $name = 'filament-icon-select-column';
+
+    public static string $viewNamespace = 'guava-icon-select-column';
+
     public function configurePackage(Package $package): void
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
         $package
-            ->name('guava-icon-select-column')
-            ->hasViews()
+            ->name(static::$name)
+            ->hasViews(static::$viewNamespace)
         ;
     }
 
@@ -28,7 +27,7 @@ class FilamentIconSelectColumnServiceProvider extends PackageServiceProvider
             [
                 AlpineComponent::make(
                     'columns/icon-select',
-                    __DIR__ . '/../resources/js/dist/components/columns/icon-select.js'
+                    __DIR__ . '/../dist/components/columns/icon-select.js'
                 ),
             ],
             'guava/icon-select-column'

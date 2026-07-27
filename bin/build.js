@@ -46,5 +46,5 @@ const defaultOptions = {
 compile({
     ...defaultOptions,
     entryPoints: ['./resources/js/components/columns/icon-select.js'],
-    outfile: './resources/js/dist/components/columns/icon-select.js',
+    outfile: './dist/components/columns/icon-select.js',
 })
