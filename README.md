@@ -1,41 +1,31 @@
-![Filament Icon Select Column Banner](https://github.com/GuavaCZ/filament-icon-select-column/raw/main/docs/images/banner.jpg)
+![filament-icon-select-column Banner](https://github.com/GuavaCZ/filament-icon-select-column/raw/main/.github/banner.png)
 
-
-# Adds a icon select (via dropdown) column to your filament tables.
+# Icon Select Column for your filament tables
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/guava/filament-icon-select-column.svg?style=flat-square)](https://packagist.org/packages/guava/filament-icon-select-column)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/guavaCZ/filament-icon-select-column/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/guavaCZ/filament-icon-select-column/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/GuavaCZ/filament-icon-select-column/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/GuavaCZ/filament-icon-select-column/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/guava/filament-icon-select-column.svg?style=flat-square)](https://packagist.org/packages/guava/filament-icon-select-column)
 
-This plugin adds an Icon Select Column to your filament tables.
+This plugin adds an editable icon column to your filament tables. The cell renders the current state as an icon, and clicking it opens a dropdown where the user picks a new state, again represented by icons. The selection is saved straight to the record, like filament's own `SelectColumn`.
+
+This is useful for quickly toggling states directly from a table, for example a status, a priority or a rating, without opening the edit page.
+
+## Documentation
+
+The full documentation is available at [guava.cz](https://guava.cz/developers/packages/filament-icon-select-column), and in the [`docs`](docs) directory of this repository.
 
 ## Version compatibility
+
 | Filament version | Plugin version |
-| ---------------- |:--------------:| 
-| 3.x              | 1.x            |
-| 4.x              | 2.x            |
-| 5.x              | 3.x            |
+|------------------|:--------------:|
+| 3.x              |      1.x       |
+| 4.x              |      2.x       |
+| 5.x              |      3.x       |
+
+For older filament versions, please check the branch of the respective version.
 
 ## Showcase
 
-<video width="320" height="240" controls>
-  <source src="https://github.com/GuavaCZ/filament-icon-select-column/raw/main/docs/images/demo_preview.mp4" type="video/mp4">
-</video>
-
-
-
-https://github.com/user-attachments/assets/72cb40cf-27cb-4f6b-b204-178c1f3dd0a9
-
-
-
 ![Screenshot 1](https://github.com/GuavaCZ/filament-icon-select-column/raw/main/docs/images/screenshot_01.png)
-
-## Support us
-
-Your support is key to the continual advancement of our plugin. We appreciate every user who has contributed to our journey so far.
-
-While our plugin is available for all to use, if you are utilizing it for commercial purposes and believe it adds significant value to your business, we kindly ask you to consider supporting us through GitHub Sponsors. This sponsorship will assist us in continuous development and maintenance to keep our plugin robust and up-to-date. Any amount you contribute will greatly help towards reaching our goals. Join us in making this plugin even better and driving further innovation.
 
 ## Installation
 
@@ -45,57 +35,32 @@ You can install the package via composer:
 composer require guava/filament-icon-select-column
 ```
 
-Additionally, you **need** to have a custom filamen theme installed, otherwise you might encounter some styling issues.
+Next, publish the package assets:
 
-Check the official [filament documentation here](https://filamentphp.com/docs/3.x/panels/themes#creating-a-custom-theme) to learn how to do that.
+```bash
+php artisan filament:assets
+```
 
-Then in your custom filament theme `theme.css` file, add the following line to build the CSS correctly:
+Finally, make sure you have a **custom filament theme** (read [here](https://filamentphp.com/docs/5.x/styling/overview#creating-a-custom-theme) how to create one) and add the following to your **theme.css** file so the CSS is properly built:
+
 ```css
 @source '../../../../vendor/guava/filament-icon-select-column/resources/**/*';
 ```
 
 ## Usage
 
-In any filament table, simply use it like any other column.
-
-The package works best in combination with backed enums, such as in the below example.
-
-The enum should implement `HasLabel`, `HasIcon` and optionally `HasColor` as described in the filament documentation [here](https://filamentphp.com/docs/3.x/support/enums).
+Add the column to any table. It works best with a backed enum implementing `HasLabel`, `HasIcon` and optionally `HasColor`:
 
 ```php
 use Guava\FilamentIconSelectColumn\Tables\Columns\IconSelectColumn;
 
 $table->columns([
-    IconSelectColumn::make('state')
-        ->options(MyStateEnum::class)
+    IconSelectColumn::make('status')
+        ->options(Status::class),
 ]);
 ```
 
-Alternatively, you can pass an array of options and icons directly to the column:
-
-```php
-$table->columns([
-    IconSelectColumn::make('state')
-        ->options([
-            'opt1' => 'Option 1',
-            'opt2' => 'Option 2',
-        ])
-        ->icons([
-            'opt1' => 'heroicon-o-check',
-            'opt2' => 'heroicon-o-x-mark',
-        ])
-]);
-```
-
-### Close on selection
-If you want the dropdown to automatically close after you select an option, you can use the `closeOnSelection` method:
-```php
-use Guava\FilamentIconSelectColumn\Tables\Columns\IconSelectColumn;
-
-IconSelectColumn::make('state')
-    ->closeOnSelection()
-    // ...
-```
+Everything else, including array options, icon sizes and closing the dropdown on selection, is covered in the [documentation](docs/3.x/01-introduction.md).
 
 ## Testing
 
@@ -109,7 +74,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
@@ -117,9 +82,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Lukas Frey](https://github.com/GuavaCZ)
+- [Lukas Frey](https://github.com/lukas-frey)
 - [All Contributors](../../contributors)
-- Spatie - Our package skeleton is a modified version of [Spatie's Package Skeleton](https://github.com/spatie/package-skeleton-laravel)
 
 ## License
 
