@@ -18,6 +18,3 @@ Please follow the [filament upgrade guide](https://filamentphp.com/docs/5.x/upgr
 composer require guava/filament-icon-select-column:"^3.0"
 ```
 
-## `closeOnSelection()` is back
-
-Version 3.0.1 restores `closeOnSelection()`, which was lost in the 2.x rewrite. If you removed it during the 1.x to 2.x upgrade, you can add it back.

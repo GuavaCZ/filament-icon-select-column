@@ -28,4 +28,4 @@ php artisan filament:assets
 
 ## `closeOnSelection()` is unavailable
 
-The rewrite dropped `closeOnSelection()`. If you rely on it, stay on 1.x or upgrade to 3.x (filament 5), where it is restored.
+The rewrite dropped `closeOnSelection()`. If you rely on it, stay on 1.x.
