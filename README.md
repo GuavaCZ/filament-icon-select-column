@@ -11,7 +11,7 @@ This is useful for quickly toggling states directly from a table, for example a 
 
 ## Documentation
 
-The full documentation is available at [guava.cz](https://guava.cz/developers/packages/filament-icon-select-column), and in the [`docs`](docs) directory of this repository.
+The full documentation is available at [guava.cz](https://guava.cz/developers/packages/filament-icon-select-column).
 
 ## Version compatibility
 
@@ -60,7 +60,7 @@ $table->columns([
 ]);
 ```
 
-Everything else, including array options, icon sizes and closing the dropdown on selection, is covered in the [documentation](docs/3.x/01-introduction.md).
+Everything else, including array options, icon sizes and closing the dropdown on selection, is covered in the [documentation](https://guava.cz/developers/packages/filament-icon-select-column).
 
 ## Testing
 
